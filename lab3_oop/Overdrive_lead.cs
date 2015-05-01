@@ -17,6 +17,9 @@ namespace lab3_oop
         {
             overdrive = options[5];
             doubletrack_level2 = options[6];
+            filepath = "overdrive_lead.wav";
         }
+
+        public Overdrive_lead() { }
     }
 }

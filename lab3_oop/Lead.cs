@@ -14,5 +14,7 @@ namespace lab3_oop
         {
             doubletrack_level1 = options[2];
         }
+
+        public Lead() { }
     }
 }

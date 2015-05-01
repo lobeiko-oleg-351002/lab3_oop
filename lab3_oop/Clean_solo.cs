@@ -14,6 +14,9 @@ namespace lab3_oop
             :base (options)
         {
             clean = options[3];
+            filepath = "clean_solo.wav";
         }
+
+        public Clean_solo() { }
     }
 }

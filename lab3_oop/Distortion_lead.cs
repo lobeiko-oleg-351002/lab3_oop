@@ -17,6 +17,8 @@ namespace lab3_oop
         {
             distortion = options[4];
             doubletrack_level2 = options[6];
+            filepath = "distortion_lead.wav";
         }
+        public Distortion_lead() { }
     }
 }

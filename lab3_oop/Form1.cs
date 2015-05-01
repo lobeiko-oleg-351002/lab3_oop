@@ -21,16 +21,31 @@ namespace lab3_oop
         List<Guitar> guitarList = new List<Guitar>();
         SoundPlayer player = new SoundPlayer();
         bool[] options = new bool[7];
+        bool[] checkBoxes_Clean_lead = new bool[] { false, false, true, true, false, false, false };
+        bool[] checkBoxes_Overdrive_lead = new bool[] { false, false, true, false, false, true, true };
+        bool[] checkBoxes_Distortion_lead = new bool[] { false, false, true, false, true, false, true};
+        bool[] checkBoxes_Clean_solo = new bool[] { true, true, false, true, false, false, false };
+        bool[] checkBoxes_Distortion_solo = new bool[] { true, true, false, false, true, false, false };
+        bool[] checkBoxes_Lead = new bool[] { false, false, true, false, false, false, false };
+        bool[] checkBoxes_Solo = new bool[] { true, true, false, false, false, false, false };
+
+        Dictionary<int, CheckBox> checkDictionary = new Dictionary<int, CheckBox>();
+
         public Form1()
         {
             InitializeComponent();
-            checkBox1.Enabled = false;
-            checkBox2.Enabled = false;
-            checkBox3.Enabled = false;
-            checkBox4.Enabled = false;
-            checkBox5.Enabled = false;
-            checkBox6.Enabled = false;
-            checkBox7.Enabled = false;
+            checkDictionary.Add(1, checkBox1);
+            checkDictionary.Add(2, checkBox2);
+            checkDictionary.Add(3, checkBox3);
+            checkDictionary.Add(4, checkBox4);
+            checkDictionary.Add(5, checkBox5);
+            checkDictionary.Add(6, checkBox6);
+            checkDictionary.Add(7, checkBox7);
+            
+            for (int i = 1; i <= 7; i++)
+            {
+                checkDictionary[i].Enabled = false;
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -38,93 +53,59 @@ namespace lab3_oop
 
         }
 
+        private void setCheckDictionary(bool[] state)
+        {
+            for (int i = 1; i <= checkDictionary.Count; i++)
+            {
+                checkDictionary[i].Enabled = state[i-1];
+            }
+        }
+
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            checkBox1.Enabled = true;
-            checkBox2.Enabled = true;
-            checkBox3.Enabled = false;
-            checkBox4.Enabled = false;
-            checkBox5.Enabled = false;
-            checkBox6.Enabled = false;
-            checkBox7.Enabled = false;
+            setCheckDictionary(checkBoxes_Solo);
 
             currentClass = typeof(Solo).AssemblyQualifiedName;
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            checkBox1.Enabled = true;
-            checkBox2.Enabled = true;
-            checkBox3.Enabled = false;
-            checkBox4.Enabled = true;
-            checkBox5.Enabled = false;
-            checkBox6.Enabled = false;
-            checkBox7.Enabled = false;
+            setCheckDictionary(checkBoxes_Clean_solo);
 
             currentClass = typeof(Clean_solo).AssemblyQualifiedName;
         }
 
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
-            checkBox1.Enabled = true;
-            checkBox2.Enabled = true;
-            checkBox3.Enabled = false;
-            checkBox4.Enabled = false;
-            checkBox5.Enabled = true;
-            checkBox6.Enabled = false;
-            checkBox7.Enabled = false;
+            setCheckDictionary(checkBoxes_Distortion_solo);
 
             currentClass = typeof(Distortion_solo).AssemblyQualifiedName;
         }
 
         private void radioButton4_CheckedChanged(object sender, EventArgs e)
         {
-            checkBox1.Enabled = false;
-            checkBox2.Enabled = false;
-            checkBox3.Enabled = true;
-            checkBox4.Enabled = false;
-            checkBox5.Enabled = false;
-            checkBox6.Enabled = false;
-            checkBox7.Enabled = false;
+            setCheckDictionary(checkBoxes_Lead);
 
             currentClass = typeof(Lead).AssemblyQualifiedName;
         }
 
         private void radioButton5_CheckedChanged(object sender, EventArgs e)
         {
-            checkBox1.Enabled = false;
-            checkBox2.Enabled = false;
-            checkBox3.Enabled = true;
-            checkBox4.Enabled = true;
-            checkBox5.Enabled = false;
-            checkBox6.Enabled = false;
-            checkBox7.Enabled = false;
+            setCheckDictionary(checkBoxes_Clean_lead);
 
             currentClass = typeof(Clean_lead).AssemblyQualifiedName;
         }
 
         private void radioButton6_CheckedChanged(object sender, EventArgs e)
         {
-            checkBox1.Enabled = false;
-            checkBox2.Enabled = false;
-            checkBox3.Enabled = true;
-            checkBox4.Enabled = false;
-            checkBox5.Enabled = true;
-            checkBox6.Enabled = false;
-            checkBox7.Enabled = true;
+            setCheckDictionary(checkBoxes_Distortion_lead);
 
             currentClass = typeof(Distortion_lead).AssemblyQualifiedName;
         }
 
         private void radioButton7_CheckedChanged(object sender, EventArgs e)
         {
-            checkBox1.Enabled = false;
-            checkBox2.Enabled = false;
-            checkBox3.Enabled = true;
-            checkBox4.Enabled = false;
-            checkBox5.Enabled = false;
-            checkBox6.Enabled = true;
-            checkBox7.Enabled = true;
+            setCheckDictionary(checkBoxes_Overdrive_lead);
 
             currentClass = typeof(Overdrive_lead).AssemblyQualifiedName;
 
@@ -132,17 +113,13 @@ namespace lab3_oop
 
         private void button1_Click(object sender, EventArgs e)
         {
-            options[0] = checkBox1.Checked;
-            options[1] = checkBox2.Checked;
-            options[2] = checkBox3.Checked;
-            options[3] = checkBox4.Checked;
-            options[4] = checkBox5.Checked;
-            options[5] = checkBox6.Checked;
-            options[6] = checkBox7.Checked;
+            for (int i = 1; i <= checkDictionary.Count; i++)
+            {
+                options[i-1] = checkDictionary[i].Checked;
+            }
             Type type = Type.GetType(currentClass);
-            var guitar = Activator.CreateInstance(type, options);
-            //var newGuitar = creater.CreateObject(currentClass,options);
-            guitarList.Add((Guitar)guitar);
+            Guitar guitar = (Guitar)Activator.CreateInstance(type, options);
+            guitarList.Add(guitar);
             listBox1.Items.Add(guitar.ToString());
         }
 
@@ -154,27 +131,21 @@ namespace lab3_oop
                 listBox1.Items.RemoveAt(currentItem);
                 guitarList.RemoveAt(currentItem);
             }
-           // Dispose(guitarList[currentItem]);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //XmlSerializer serializer = new XmlSerializer(typeof(List<Guitar>));
-
-            //using (var stream = File.OpenWrite("data.xml"))
-            //{
-            //    serializer.Serialize(stream, guitarList);
-            //}
             try
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                using (FileStream stream = new FileStream("data.bin", FileMode.OpenOrCreate))
+                XmlSerializer serializer = new XmlSerializer(typeof(List<Guitar>));
+                using (FileStream stream = new FileStream("data.xml", FileMode.Create))
                 {
-                    formatter.Serialize(stream, guitarList);
+                     serializer.Serialize(stream, guitarList);
                 }
             }
             catch (IOException)
             {
+
             }
             
         }
@@ -183,11 +154,11 @@ namespace lab3_oop
         {
             try
             {
-                using (Stream stream = File.Open("data.bin", FileMode.Open))
+                using (Stream stream = File.Open("data.xml", FileMode.Open))
                 {
-                    BinaryFormatter formatter = new BinaryFormatter();
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<Guitar>));
                     guitarList.Clear();
-                    guitarList = (List<Guitar>)formatter.Deserialize(stream);
+                    guitarList = (List<Guitar>)serializer.Deserialize(stream);
                     listBox1.Items.Clear();                   
                     foreach (Guitar guitar in guitarList)
                     {
@@ -203,7 +174,7 @@ namespace lab3_oop
         private void button5_Click(object sender, EventArgs e)
         {
             
-            player.SoundLocation = "pretender.mp3";
+            player.SoundLocation = guitarList[listBox1.SelectedIndex].filepath;
             player.Load();
             player.Play();
         }

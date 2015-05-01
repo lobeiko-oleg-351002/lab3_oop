@@ -14,6 +14,9 @@ namespace lab3_oop
             :base (options)
         {
             distortion = options[4];
+            filepath = "distortion_solo.wav";
         }
+
+        public Distortion_solo() { }
     }
 }

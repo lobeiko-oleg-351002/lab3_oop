@@ -20,6 +20,9 @@ namespace lab3_oop
             clean = options[3];
             chorus = options[0];
             reverb = options[1];
+            filepath = "clean_lead.wav";
         }
+
+        public Clean_lead() { }
     }
 }
